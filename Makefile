@@ -28,6 +28,12 @@ build:
 	- echo 'Please run make update_tor_version to build the container with the last tor version'
 	docker-compose -f docker-compose.build.yml build
 
+build-no-compose:
+	docker build --build-arg tor_version=$(TOR_VERSION) --build-arg torsocks_version=$(TORSOCKS_VERSION) -f Dockerfile -t lizz0thabet/tor-hidden-service:$(CUR_TAG) --no-cache .
+
+publish-multiplatform:
+	docker buildx build --platform linux/amd64,linux/arm64 --build-arg tor_version=$(TOR_VERSION) --build-arg torsocks_version=$(TORSOCKS_VERSION) -f Dockerfile --tag lizz0thabet/tor-hidden-service:$(CUR_TAG) --tag lizz0thabet/tor-hidden-service:latest --push .
+
 rebuild:
 	- echo rebuild with tor version $(TOR_VERSION) and torsocks version $(TORSOCKS_VERSION)
 	- echo 'Please run make update_tor_version to build the container with the last tor version'
